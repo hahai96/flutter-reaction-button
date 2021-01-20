@@ -48,6 +48,8 @@ class FlutterReactionButtonCheck extends StatefulWidget {
   final EdgeInsets boxPadding;
 
   final double boxItemsSpacing;
+  
+  final Function onTap;
 
   FlutterReactionButtonCheck({
     Key key,
@@ -66,6 +68,7 @@ class FlutterReactionButtonCheck extends StatefulWidget {
     this.isChecked = false,
     this.boxPadding = const EdgeInsets.all(0),
     this.boxItemsSpacing = 0,
+    this.onTap,
   })  : assert(reactions != null),
         super(key: key);
 
@@ -105,17 +108,24 @@ class _FlutterReactionButtonCheckState
   }
 
   @override
-  Widget build(BuildContext context) => InkWell(
-        key: _buttonKey,
-        highlightColor: widget.highlightColor,
-        splashColor: widget.splashColor,
-        onTap: () {
-          _onClickReactionButton();
-        },
-        onLongPress: () {
-          _onTapReactionButton(context);
-        },
-        child: (_selectedReaction ?? widget.reactions[0]).icon,
+  Widget build(BuildContext context) =>
+      Material(
+        color: Colors.white,
+        child: InkWell(
+          key: _buttonKey,
+          highlightColor: widget.highlightColor,
+          splashColor: widget.splashColor,
+          onTap: () {
+            if (widget.onTap != null) {
+              widget.onTap();
+            }
+            // _onClickReactionButton();
+          },
+          onLongPress: () {
+            _onTapReactionButton(context);
+          },
+          child: (_selectedReaction ?? widget.reactions[0]).icon,
+        ),
       );
 
   void _onTapReactionButton(BuildContext context) {
